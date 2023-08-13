@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const { Content, Sider } = Layout;
 import Tags from "../components/Tags";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostMessage } from "../store/slices/dataSlice";
+import { fetchPostMessage, setTags } from "../store/slices/dataSlice";
 const ChatApp = () => {
   // const [messages, setMessages] = useState([]);
   const messages = useSelector((state) => state.dataSlice.allMessages);
@@ -24,16 +24,24 @@ const ChatApp = () => {
           user: currentUser,
         })
       );
-      // setMessages([...messages, { text: inputMessage, tags: userTags }]);
+
       setInputMessage("");
     }
+  };
+  const onClickTag = (e) => {
+    dispatch(setTags(e.target.innerHTML));
   };
 
   return (
     <>
       <Link to={"/"}>
-        <div className="ml-6 cursor-pointer   ">
-          <RollbackOutlined />
+        <div className="flex justify-between mr-20">
+          <div className="ml-6 cursor-pointer   ">
+            <RollbackOutlined />
+          </div>
+          <div className="">
+            <h3>Current User: {currentUser}</h3>
+          </div>
         </div>
       </Link>
 
@@ -62,18 +70,48 @@ const ChatApp = () => {
             </Button>
           </div>
           <List
+            // dataSource={messages.filter(
+            //   (message) =>
+            //     currentTags.length === 0 ||
+            //     message.tags.some((tag) => currentTags.includes(tag || ""))
+            // )}
             dataSource={messages.filter(
               (message) =>
                 currentTags.length === 0 ||
+                message.tags.length === 0 ||
                 message.tags.some((tag) => currentTags.includes(tag))
             )}
             renderItem={(item) => (
               <List.Item>
                 <List.Item.Meta
                   avatar={<Avatar icon={<UserOutlined />} />}
-                  title="User"
-                  description={item.text}
-                  tags={item.tags}
+                  title={
+                    item.user === currentUser ? (
+                      <span style={{ fontWeight: "bold", color: "green" }}>
+                        {item.user}
+                      </span>
+                    ) : (
+                      <span style={{ fontWeight: "bolder", color: "navy" }}>
+                        {item.user}
+                      </span>
+                    )
+                  }
+                  description={
+                    <span style={{ fontSize: 16, fontStyle: "normal" }}>
+                      {item.text}
+                    </span>
+                  }
+                />
+                <List.Item.Meta
+                  onClick={(e) => onClickTag(e)}
+                  className="cursor-pointer"
+                  title={item.tags.map((it, index) => {
+                    return (
+                      <span className="pr-2" key={index}>
+                        {it}
+                      </span>
+                    );
+                  })}
                 />
               </List.Item>
             )}

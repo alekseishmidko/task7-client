@@ -9,7 +9,6 @@ const Login = () => {
   const dispatch = useDispatch();
   //
   const onFinish = (formData) => {
-    // console.log(formData.name);
     try {
       dispatch(enter(formData.name));
       dispatch(fetchGetMessages());
