@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout, Input, Button, List, Avatar } from "antd";
 import { UserOutlined, RollbackOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -6,17 +6,17 @@ const { Content, Sider } = Layout;
 import Tags from "../components/Tags";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPostMessage, setTags } from "../store/slices/dataSlice";
+
 const ChatApp = () => {
-  // const [messages, setMessages] = useState([]);
   const messages = useSelector((state) => state.dataSlice.allMessages);
   const [inputMessage, setInputMessage] = useState("");
-  // const [userTags, setUserTags] = useState([]);
-  // const [currentTags, setCurrentTags] = useState([]);
   const dispatch = useDispatch();
   const { currentUser, currentTags } = useSelector((state) => state.dataSlice);
+
   const handleSendMessage = () => {
     if (inputMessage.trim() !== "") {
       console.log({ inputMessage, currentTags, currentUser });
+
       dispatch(
         fetchPostMessage({
           text: inputMessage,
@@ -24,10 +24,12 @@ const ChatApp = () => {
           user: currentUser,
         })
       );
-
       setInputMessage("");
     }
   };
+  //
+
+  //
   const onClickTag = (e) => {
     dispatch(setTags(e.target.innerHTML));
   };
@@ -70,11 +72,7 @@ const ChatApp = () => {
             </Button>
           </div>
           <List
-            // dataSource={messages.filter(
-            //   (message) =>
-            //     currentTags.length === 0 ||
-            //     message.tags.some((tag) => currentTags.includes(tag || ""))
-            // )}
+            size="small"
             dataSource={messages.filter(
               (message) =>
                 currentTags.length === 0 ||

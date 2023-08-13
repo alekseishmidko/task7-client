@@ -35,7 +35,7 @@ const Tags = () => {
 
   const handleInputConfirm = () => {
     if (inputValue && tags.indexOf(inputValue) === -1) {
-      dispatch(setTags(inputValue));
+      dispatch(setTags(inputValue.toLowerCase()));
     }
     setInputVisible(false);
     setInputValue("");
@@ -44,6 +44,11 @@ const Tags = () => {
   const forMap = (tag) => {
     const tagElem = (
       <Tag
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
         className="my-2 "
         closable
         onClose={(e) => {
@@ -51,7 +56,9 @@ const Tags = () => {
           handleClose(tag);
         }}
       >
-        {tag}
+        <span style={{ fontSize: 12, fontWeight: 400, paddingBottom: 1 }}>
+          {tag}
+        </span>
       </Tag>
     );
     return (
@@ -66,6 +73,7 @@ const Tags = () => {
   const tagPlusStyle = {
     background: token.colorBgContainer,
     borderStyle: "dashed",
+    cursor: "pointer",
   };
 
   return (
@@ -102,7 +110,8 @@ const Tags = () => {
         />
       ) : (
         <Tag onClick={showInput} style={tagPlusStyle}>
-          <PlusOutlined /> New Tag
+          <span style={{ fontSize: 16, fontWeight: "normal" }}> + </span> New
+          tag
         </Tag>
       )}
     </>
