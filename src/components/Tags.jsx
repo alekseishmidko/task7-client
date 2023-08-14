@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-
-import { PlusOutlined } from "@ant-design/icons";
-import { TweenOneGroup } from "rc-tween-one";
-import { Input, Tag, theme } from "antd";
+import { AutoComplete, Tag, theme } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { setTags, deleteTags } from "../store/slices/dataSlice";
+
 const Tags = () => {
   const dispatch = useDispatch();
   const { token } = theme.useToken();
@@ -21,7 +19,6 @@ const Tags = () => {
 
   const handleClose = (removedTag) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    // console.log(newTags, "newTags");
     dispatch(deleteTags(newTags));
   };
 
@@ -29,8 +26,8 @@ const Tags = () => {
     setInputVisible(true);
   };
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+  const handleInputChange = (value) => {
+    setInputValue(value);
   };
 
   const handleInputConfirm = () => {
@@ -41,34 +38,7 @@ const Tags = () => {
     setInputValue("");
   };
 
-  const forMap = (tag) => {
-    const tagElem = (
-      <Tag
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        className="my-2 "
-        closable
-        onClose={(e) => {
-          e.preventDefault();
-          handleClose(tag);
-        }}
-      >
-        <span style={{ fontSize: 12, fontWeight: 400, paddingBottom: 1 }}>
-          {tag}
-        </span>
-      </Tag>
-    );
-    return (
-      <span key={tag} style={{ display: "inline-block" }}>
-        {tagElem}
-      </span>
-    );
-  };
-
-  const tagChild = tags.map(forMap);
+  const tagChildren = tags.map((tag) => ({ value: tag }));
 
   const tagPlusStyle = {
     background: token.colorBgContainer,
@@ -79,28 +49,28 @@ const Tags = () => {
   return (
     <>
       <div style={{ marginBottom: 16 }}>
-        <TweenOneGroup
-          enter={{
-            scale: 0.9,
-            opacity: 0,
-            type: "from",
-            duration: 100,
-          }}
-          onEnd={(e) => {
-            if (e.type === "appear" || e.type === "enter") {
-              e.target.style = "display: inline-block";
-            }
-          }}
-          leave={{ opacity: 0, width: 0, scale: 0, duration: 500 }}
-          appear={false}
-        >
-          {tagChild}
-        </TweenOneGroup>
+        {tags.map((tag) => (
+          <Tag
+            key={tag}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 8,
+            }}
+            closable
+            onClose={() => handleClose(tag)}
+          >
+            <span style={{ fontSize: 12, fontWeight: 400, paddingBottom: 1 }}>
+              {tag}
+            </span>
+          </Tag>
+        ))}
       </div>
       {inputVisible ? (
-        <Input
+        <AutoComplete
           ref={inputRef}
-          type="text"
+          options={tagChildren}
           size="small"
           style={{ width: 78 }}
           value={inputValue}

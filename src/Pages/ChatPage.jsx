@@ -5,18 +5,33 @@ import { Link } from "react-router-dom";
 const { Content, Sider } = Layout;
 import Tags from "../components/Tags";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostMessage, setTags } from "../store/slices/dataSlice";
-
+import {
+  fetchGetMessages,
+  fetchPostMessage,
+  setTags,
+} from "../store/slices/dataSlice";
+import socketIO from "socket.io-client";
 const ChatApp = () => {
   const messages = useSelector((state) => state.dataSlice.allMessages);
+  const isLoading = useSelector((state) => state.dataSlice.isLoading);
   const [inputMessage, setInputMessage] = useState("");
   const dispatch = useDispatch();
   const { currentUser, currentTags } = useSelector((state) => state.dataSlice);
+  // socket logics
+  const socket = socketIO.connect("http://localhost:3001");
 
+  //
   const handleSendMessage = () => {
     if (inputMessage.trim() !== "") {
-      console.log({ inputMessage, currentTags, currentUser });
+      socket.emit("message", {
+        text: inputMessage,
+        tags: currentTags,
+        user: currentUser,
+        userID: `${socket.id}`,
+        socketID: socket.id,
+      });
 
+      //
       dispatch(
         fetchPostMessage({
           text: inputMessage,
@@ -27,13 +42,19 @@ const ChatApp = () => {
       setInputMessage("");
     }
   };
-  //
+  useEffect(() => {
+    socket.on("responce", (data) => {
+      console.log(data);
+      dispatch(fetchGetMessages());
+    });
+  }, []);
 
-  //
   const onClickTag = (e) => {
     dispatch(setTags(e.target.innerHTML));
   };
-
+  if (isLoading === "loading") {
+    return <h3>Loading</h3>;
+  }
   return (
     <>
       <Link to={"/"}>

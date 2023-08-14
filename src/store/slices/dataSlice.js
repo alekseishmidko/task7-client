@@ -4,6 +4,7 @@ import axios from "../../axios.js";
 const initialState = {
   currentUser: "",
   currentTags: [],
+  allUnicTags: [],
   allMessages: [],
   isLoading: "loading",
 };
@@ -54,32 +55,38 @@ const dataSlice = createSlice({
       state.isLoading = "loading";
       state.errors = null;
       state.allMessages = [];
+      state.allUnicTags = [];
     });
     builder.addCase(fetchGetMessages.fulfilled, (state, action) => {
-      state.isLoading = "loading";
+      state.isLoading = "loaded";
       state.errors = null;
       state.allMessages = action.payload.allMessages;
+      state.allUnicTags = action.payload.allUnicTags;
     });
     builder.addCase(fetchGetMessages.rejected, (state, action) => {
       state.isLoading = "error";
       state.errors = action.error.message;
       state.allMessages = [];
+      state.allUnicTags = [];
     });
     // post Message
     builder.addCase(fetchPostMessage.pending, (state) => {
       state.isLoading = "loading";
       state.errors = null;
       state.allMessages = [];
+      state.allUnicTags = [];
     });
     builder.addCase(fetchPostMessage.fulfilled, (state, action) => {
-      state.isLoading = "loading";
+      state.isLoading = "loaded";
       state.errors = null;
       state.allMessages = action.payload.allMessages;
+      state.allUnicTags = action.payload.allUnicTags;
     });
     builder.addCase(fetchPostMessage.rejected, (state, action) => {
       state.isLoading = "error";
       state.errors = action.error.message;
       state.allMessages = [];
+      state.allUnicTags = [];
     });
   },
 });
