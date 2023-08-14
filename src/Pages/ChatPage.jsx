@@ -50,7 +50,8 @@ const ChatApp = () => {
   }, []);
 
   const onClickTag = (e) => {
-    dispatch(setTags(e.target.innerHTML));
+    console.log(e.target.innerText);
+    dispatch(setTags(e.target.innerText));
   };
   if (isLoading === "loading") {
     return <h3>Loading</h3>;
@@ -58,12 +59,9 @@ const ChatApp = () => {
   return (
     <>
       <Link to={"/"}>
-        <div className="flex justify-between mr-20">
-          <div className="ml-6 cursor-pointer   ">
+        <div className="">
+          <div className="ml-6  cursor-pointer   ">
             <RollbackOutlined />
-          </div>
-          <div className="">
-            <h3>Current User: {currentUser}</h3>
           </div>
         </div>
       </Link>
@@ -75,23 +73,8 @@ const ChatApp = () => {
             <Tags />
           </div>
         </Sider>
+
         <Content style={{ padding: "20px" }}>
-          <div style={{ marginBottom: "20px" }}>
-            <Input
-              placeholder="Enter your message"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onPressEnter={handleSendMessage}
-              className=""
-            />
-            <Button
-              type="primary"
-              onClick={handleSendMessage}
-              className=" rounded bg-blue-300 hover:bg-blue-600 mt-4"
-            >
-              Send
-            </Button>
-          </div>
           <List
             size="small"
             dataSource={messages.filter(
@@ -101,22 +84,35 @@ const ChatApp = () => {
                 message.tags.some((tag) => currentTags.includes(tag))
             )}
             renderItem={(item) => (
-              <List.Item>
+              <List.Item className="flex items-center justify-start p-2">
                 <List.Item.Meta
+                  className="mt-2 mb-4"
                   avatar={<Avatar icon={<UserOutlined />} />}
                   title={
                     item.user === currentUser ? (
-                      <span style={{ fontWeight: "bold", color: "green" }}>
-                        {item.user}
+                      <span>
+                        <span style={{ fontWeight: "bold", color: "green" }}>
+                          {item.user}
+                        </span>
+                        <span> write: </span>
                       </span>
                     ) : (
-                      <span style={{ fontWeight: "bolder", color: "navy" }}>
-                        {item.user}
+                      <span>
+                        <span style={{ fontWeight: "bolder", color: "navy" }}>
+                          {item.user}
+                        </span>
+                        <span> write: </span>
                       </span>
                     )
                   }
                   description={
-                    <span style={{ fontSize: 16, fontStyle: "normal" }}>
+                    <span
+                      style={{
+                        fontSize: 16,
+                        fontStyle: "normal",
+                        color: "ActiveCaption",
+                      }}
+                    >
                       {item.text}
                     </span>
                   }
@@ -124,18 +120,31 @@ const ChatApp = () => {
                 <List.Item.Meta
                   onClick={(e) => onClickTag(e)}
                   className="cursor-pointer"
-                  title={item.tags.map((it, index) => {
-                    return (
-                      <span className="pr-2" key={index}>
-                        {it}
-                      </span>
-                    );
+                  description={item.tags.map((it, index) => {
+                    return <span key={index}> {it} </span>;
                   })}
                 />
               </List.Item>
             )}
           />
         </Content>
+        <div className="fixed top-0 right-0 h-full p-4 bg-white shadow-md z-30 flex flex-col ">
+          <Input.TextArea
+            placeholder="Enter your message"
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onPressEnter={handleSendMessage}
+            className="h-40 resize-y"
+            rows={4}
+          />
+          <Button
+            type="primary"
+            onClick={handleSendMessage}
+            className=" rounded bg-blue-300 hover:bg-blue-600 mt-4"
+          >
+            Send
+          </Button>
+        </div>
       </Layout>
     </>
   );
