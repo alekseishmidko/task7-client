@@ -14,7 +14,10 @@ export const fetchGetMessages = createAsyncThunk(
   async (thunkAPI) => {
     try {
       const response = await axios.get("auth/getMessages");
-
+      localStorage.setItem(
+        "allUnicTags",
+        JSON.stringify(response.data.allUnicTags)
+      );
       return response.data;
     } catch (error) {
       // throw error;
@@ -55,7 +58,7 @@ const dataSlice = createSlice({
       state.isLoading = "loading";
       state.errors = null;
       state.allMessages = [];
-      state.allUnicTags = [];
+      // state.allUnicTags = [];
     });
     builder.addCase(fetchGetMessages.fulfilled, (state, action) => {
       state.isLoading = "loaded";
@@ -74,7 +77,7 @@ const dataSlice = createSlice({
       state.isLoading = "loading";
       state.errors = null;
       state.allMessages = [];
-      state.allUnicTags = [];
+      // state.allUnicTags = [];
     });
     builder.addCase(fetchPostMessage.fulfilled, (state, action) => {
       state.isLoading = "loaded";

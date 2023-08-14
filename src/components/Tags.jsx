@@ -7,10 +7,14 @@ const Tags = () => {
   const dispatch = useDispatch();
   const { token } = theme.useToken();
   const tags = useSelector((state) => state.dataSlice.currentTags);
+  const { allUnicTags, isLoading } = useSelector((state) => state.dataSlice);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef(null);
+  console.log(allUnicTags);
 
+  const unic = JSON.parse(localStorage.getItem("allUnicTags"));
+  console.log(unic);
   useEffect(() => {
     if (inputVisible) {
       inputRef.current?.focus();
@@ -38,14 +42,16 @@ const Tags = () => {
     setInputValue("");
   };
 
-  const tagChildren = tags.map((tag) => ({ value: tag }));
+  const tagChildren = unic.map((tag) => ({ value: tag }));
 
   const tagPlusStyle = {
     background: token.colorBgContainer,
     borderStyle: "dashed",
     cursor: "pointer",
   };
-
+  if (isLoading === "loading") {
+    return <h3>Loading</h3>;
+  }
   return (
     <>
       <div style={{ marginBottom: 16 }}>
