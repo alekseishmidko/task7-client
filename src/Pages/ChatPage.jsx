@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Layout, Input, Button, List, Avatar } from "antd";
+import { Layout, Input, Button, List, Avatar, AutoComplete } from "antd";
 import { UserOutlined, RollbackOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 const { Content, Sider } = Layout;
@@ -18,14 +18,29 @@ const ChatApp = () => {
   const dispatch = useDispatch();
   const { currentUser, currentTags } = useSelector((state) => state.dataSlice);
   // socket logics
-  const socket = socketIO.connect("http://localhost:3001");
+  const socket = socketIO.connect("https://task-6-server-am9o.onrender.com");
 
+  function extractHashtags(inputString) {
+    const words = inputString.split(/\s+/); // Разбиваем строку на слова
+    const hashtags = [];
+
+    words.forEach((word) => {
+      if (word.startsWith("#")) {
+        hashtags.push(word); // Удаляем символ # .substring(1)
+      }
+    });
+
+    return hashtags;
+  }
   //
   const handleSendMessage = () => {
     if (inputMessage.trim() !== "") {
+      const userHashtags = extractHashtags(inputMessage);
+      console.log(userHashtags, "userhashtags");
+      //
       socket.emit("message", {
         text: inputMessage,
-        tags: currentTags,
+        tags: userHashtags,
         user: currentUser,
         userID: `${socket.id}`,
         socketID: socket.id,
@@ -35,7 +50,7 @@ const ChatApp = () => {
       dispatch(
         fetchPostMessage({
           text: inputMessage,
-          tags: currentTags,
+          tags: userHashtags,
           user: currentUser,
         })
       );
@@ -49,13 +64,15 @@ const ChatApp = () => {
     });
   }, []);
 
-  const onClickTag = (e) => {
-    console.log(e.target.innerText);
-    dispatch(setTags(e.target.innerText));
-  };
+  // const onClickTag = (e) => {
+  //   console.log(e.target.innerText);
+  //   dispatch(setTags(e.target.innerText));
+  // };
   if (isLoading === "loading") {
     return <h3>Loading</h3>;
   }
+  const unic = JSON.parse(localStorage.getItem("allUnicTags"));
+  const tagChildren = unic.map((tag) => ({ value: tag }));
   return (
     <>
       <Link to={"/"}>
@@ -68,7 +85,7 @@ const ChatApp = () => {
 
       <Layout className="">
         <Sider width={160} style={{ background: "#fff", padding: "20px" }}>
-          <h2>Tags</h2>
+          <h2>Filter Tags</h2>
           <div className="mt-4">
             <Tags />
           </div>
@@ -117,26 +134,40 @@ const ChatApp = () => {
                     </span>
                   }
                 />
-                <List.Item.Meta
+                {/* <List.Item.Meta
                   onClick={(e) => onClickTag(e)}
                   className="cursor-pointer"
                   description={item.tags.map((it, index) => {
                     return <span key={index}> {it} </span>;
                   })}
-                />
+                /> */}
               </List.Item>
             )}
           />
         </Content>
         <div className="fixed top-0 right-0 h-full p-4 bg-white shadow-md z-30 flex flex-col ">
-          <Input.TextArea
+          {/* <Input.TextArea
             placeholder="Enter your message"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onPressEnter={handleSendMessage}
             className="h-40 resize-y"
             rows={4}
+          /> */}
+
+          <AutoComplete
+            placeholder="Enter your message"
+            value={inputMessage}
+            options={tagChildren}
+            onSearch={(value) => setInputMessage(value)}
+            onSelect={(value) => setInputMessage((prev) => prev + value)}
+            onPressEnter={handleSendMessage}
+            size="large"
+            style={{ width: 300 }}
+            bordered={false}
+            rows={4}
           />
+
           <Button
             type="primary"
             onClick={handleSendMessage}

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "https://task-6-server-am9o.onrender.com",
 });
 // instance.interceptors.request.use((config) => {
 //   config.headers.Authorization = window.localStorage.getItem("token");
