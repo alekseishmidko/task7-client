@@ -1,17 +1,17 @@
 import { Route, Routes } from "react-router-dom";
-import ChatPage from "./pages/ChatPage";
+import ChoisePage from "./Pages/ChoisePage";
 import Login from "./Pages/Login";
+import GameFirst from "./Pages/GameFirst";
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/choise" element={<ChoisePage />} />
+        <Route path="/game1" element={<GameFirst />} />
       </Routes>
     </>
   );
 }
 
 export default App;
-//  автокомплит? получить уникальные хеши из бека
-//socket

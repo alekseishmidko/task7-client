@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { validateMessages } from "../midwares/validateMessages";
 import { layout } from "../midwares/layout";
-import { enter, fetchGetMessages } from "../store/slices/dataSlice";
+import { enter } from "../store/slices/dataSlice";
+// import { io } from "socket.io-client";
 const Login = () => {
+  // const socket = io("http://localhost:3001");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   //
   const onFinish = (formData) => {
     try {
       dispatch(enter(formData.name));
-      dispatch(fetchGetMessages());
 
-      navigate("/chat");
+      navigate("/choise");
     } catch (error) {
       console.error("error while fetchLogin:", error);
     }
