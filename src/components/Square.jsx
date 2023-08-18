@@ -1,6 +1,6 @@
 import React from "react";
 
-const Box = ({ turn, index, value }) => {
+const Square = ({ turn, index, value }) => {
   return (
     <div
       className="w-48 h-48 border border-blue-400  text-center leading-48text-3xl font-bold"
@@ -13,4 +13,4 @@ const Box = ({ turn, index, value }) => {
   );
 };
 
-export default Box;
+export default Square;

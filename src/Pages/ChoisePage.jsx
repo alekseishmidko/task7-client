@@ -15,9 +15,11 @@ const ChoisePage = () => {
             </Link>
           </Col>
           <Col span={12}>
-            <Card title="game2" bordered={false}>
-              Game 2
-            </Card>
+            <Link to={"/game2"}>
+              <Card title="game2" bordered={false}>
+                game2
+              </Card>
+            </Link>
           </Col>
         </Row>
       </div>

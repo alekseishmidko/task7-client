@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Box from "../components/Box";
+import Box from "../components/Square";
 import { useLocation, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { Button, message } from "antd";
@@ -25,7 +25,7 @@ const GameFirst = () => {
   const [player, setPlayer] = useState("");
 
   const location = useLocation();
-  // const params = new URLSearchParams(location.search);
+
   const paramsRoom = new URLSearchParams(location.search).get("room");
   // id room
   const [room, setRoom] = useState(paramsRoom);
@@ -94,12 +94,11 @@ const GameFirst = () => {
       }
     }
   }, [turnData, game, turnNumber, win, myTurn]);
-
+  // условие начала игры
   useEffect(() => {
     if (!paramsRoom) {
       const newRoomName = nanoid(9);
       socket.emit("create", newRoomName);
-      console.log(newRoomName, "newRoomName");
       setRoom(newRoomName);
       setMyTurn(true);
     } else {
@@ -109,7 +108,7 @@ const GameFirst = () => {
       setMyTurn(false);
     }
   }, [paramsRoom]);
-
+  // copy link
   const clipboard = useClipboard();
   const shareLink = useCallback(() => {
     const url = `${window.location.href}?room=${room}`;
@@ -133,7 +132,7 @@ const GameFirst = () => {
           Share link
         </Button>
         <div>
-          Move:{" "}
+          Move:
           {myTurn ? (
             <span style={{ color: "darkgreen", fontWeight: "bold" }}>
               Your move
