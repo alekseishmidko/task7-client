@@ -134,11 +134,15 @@ const GameFirst = () => {
         <div>
           Move:
           {myTurn ? (
-            <span style={{ color: "darkgreen", fontWeight: "bold" }}>
+            <span
+              style={{ color: "darkgreen", fontWeight: "bold", paddingLeft: 4 }}
+            >
               Your move
             </span>
           ) : (
-            <span style={{ color: "darkred", fontWeight: "bold" }}>
+            <span
+              style={{ color: "darkred", fontWeight: "bold", paddingLeft: 4 }}
+            >
               Opponent move
             </span>
           )}

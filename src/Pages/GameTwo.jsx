@@ -186,9 +186,9 @@ const GameTwo = () => {
         <div className="mb-4">
           Move:
           {myTurn ? (
-            <span className="text-darkgreen font-bold">Your move</span>
+            <span className="text-darkgreen font-bold pl-2">Your move</span>
           ) : (
-            <span className="text-darkred font-bold pl-4">Opponent move</span>
+            <span className="text-darkred font-bold pl-2">Opponent move</span>
           )}
         </div>
         {win ? (
@@ -204,7 +204,7 @@ const GameTwo = () => {
             The second player has not joined yet! Waiting...
           </span>
         )}
-        {/* лоника победителоя */}
+
         <p className="text-lg text-black-600 mt-4">
           {result !== "" ? <span>{result}</span> : ""}
         </p>
