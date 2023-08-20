@@ -9,7 +9,7 @@ import Image from "../components/Image";
 import { nanoid } from "nanoid";
 
 const GameTwo = () => {
-  const socket = io("http://localhost:3001");
+  const socket = io("https://task-7-server-sm7e.onrender.com");
   const location = useLocation();
   // const params = new URLSearchParams(location.search);
   const paramsRoom = new URLSearchParams(location.search).get("room");

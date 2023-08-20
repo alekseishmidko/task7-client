@@ -9,7 +9,7 @@ import { io } from "socket.io-client";
 import { combs } from "../midwares/combs";
 import { useSelector } from "react-redux";
 const GameFirst = () => {
-  const socket = io("http://localhost:3001");
+  const socket = io("https://task-7-server-sm7e.onrender.com");
   const navigate = useNavigate();
   const playerName = useSelector((state) => state.dataSlice.currentUser);
   console.log(playerName);
