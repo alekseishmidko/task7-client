@@ -118,7 +118,7 @@ const GameFirst = () => {
   return (
     <div>
       <ArrowLeftOutlined
-        onClick={() => navigate(-1)}
+        onClick={() => navigate("/choise")}
         className="ml-4 mt-2  cursor-pointer text-xl hover:text-blue-500 transform hover:scale-110 transition duration-300"
       />
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
